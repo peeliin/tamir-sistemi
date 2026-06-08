@@ -1,0 +1,32 @@
+.home-container {
+  height: 100vh;
+  background: linear-gradient(to right, #2f4ba5, #3c5ccf);
+  color: white;
+  text-align: center;
+  padding-top: 100px;
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 50px;
+}
+
+.card {
+  background: white;
+  color: black;
+  padding: 30px;
+  border-radius: 12px;
+  width: 250px;
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px;
+  width: 100%;
+  background: #2f4ba5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+}

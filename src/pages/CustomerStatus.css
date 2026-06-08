@@ -1,0 +1,157 @@
+.customer-container {
+  padding: 24px 20px;
+  max-width: 560px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.customer-container h2 {
+  margin: 0 0 16px;
+  color: #1e3a8a;
+}
+
+.customer-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+  margin-bottom: 16px;
+}
+
+.customer-card__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 14px;
+}
+
+.customer-card__row span {
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.customer-card__row strong {
+  text-align: right;
+  color: #1f2937;
+}
+
+.customer-ref-no {
+  font-family: ui-monospace, "Cascadia Code", monospace;
+  font-size: 13px;
+  word-break: break-all;
+}
+
+.timeline {
+  margin-top: 20px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.circle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #d1d5db;
+  margin-right: 12px;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.step.active .circle {
+  background: #16a34a;
+}
+
+.label {
+  font-size: 14px;
+}
+
+.date {
+  display: block;
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+.buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.approve {
+  flex: 1;
+  min-width: 120px;
+  background: #16a34a;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.reject {
+  flex: 1;
+  min-width: 120px;
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.customer-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #3f51b5;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.customer-btn--outline {
+  background: white;
+  color: #3f51b5;
+  border: 2px solid #3f51b5;
+}
+
+.not-found {
+  color: #b91c1c;
+  margin-bottom: 8px;
+}
+
+.not-found-hint {
+  color: #6b7280;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 480px) {
+  .customer-container {
+    padding: 16px 12px;
+  }
+
+  .customer-card__row {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .customer-card__row strong {
+    text-align: left;
+  }
+}

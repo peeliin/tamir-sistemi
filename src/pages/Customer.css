@@ -1,0 +1,75 @@
+.customer-container {
+  padding: 30px;
+  font-family: Arial, sans-serif;
+}
+
+.customer-container h2 {
+  margin-bottom: 20px;
+}
+
+/* kart */
+.card {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 400px;
+}
+
+/* durum badge */
+.status {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+/* DURUM RENKLERİ (SADE İSİM) */
+.status.beklemede {
+  background: #ddd;
+}
+
+.status.onaybekliyor {
+  background: orange;
+  color: white;
+}
+
+.status.onaylandi {
+  background: green;
+  color: white;
+}
+
+.status.reddedildi {
+  background: red;
+  color: white;
+}
+
+/* butonlar */
+.buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.approve {
+  background-color: #4caf50;
+  border: none;
+  padding: 10px;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.reject {
+  background-color: #f44336;
+  border: none;
+  padding: 10px;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* cihaz yok */
+.not-found {
+  padding: 20px;
+  color: red;
+}
