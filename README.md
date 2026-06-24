@@ -1,70 +1,75 @@
-# Getting Started with Create React App
+# Elektronik Tamir Sistemi
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Telefon, PC ve tablet tamir kayıtlarını yönetmek ve müşterilerin cihaz durumunu takip etmek için React tabanlı teknik servis uygulaması.
 
-## Available Scripts
+## Özellikler
 
-In the project directory, you can run:
+- **Admin paneli:** Cihaz kaydı, durum güncelleme, fiyat belirleme, onaya gönderme, tamir/teslim
+- **Müşteri takibi:** Referans no + şifre ile giriş, durum timeline'ı, fiyat onayı/reddi
+- **Referans QR kodu:** Yeni kayıt ve müşteri ekranında referans numarası QR olarak gösterilir
+- **Veri saklama:** Tarayıcı `localStorage` (prototip aşaması)
 
-### `npm start`
+## Kurulum
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+npm install
+npm start
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Uygulama [http://localhost:3000](http://localhost:3000) adresinde açılır.
 
-### `npm test`
+### Admin girişi (varsayılan)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+| Alan | Değer |
+|------|-------|
+| Kullanıcı adı | `admin` |
+| Şifre | `admin123` |
 
-### `npm run build`
+Özelleştirmek için `.env.example` dosyasını `.env` olarak kopyalayıp `REACT_APP_ADMIN_USER` ve `REACT_APP_ADMIN_PASS` değerlerini değiştirin.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Sayfa yapısı
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+| URL | Açıklama |
+|-----|----------|
+| `/` | Müşteri girişi |
+| `/admin/giris` | Admin girişi |
+| `/admin` | Admin paneli (oturum gerekli) |
+| `/takip` | Müşteri cihaz takibi (giriş sonrası) |
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Komutlar
 
-### `npm run eject`
+| Komut | Açıklama |
+|-------|----------|
+| `npm start` | Geliştirme sunucusu |
+| `npm test` | Testleri çalıştır |
+| `npm run build` | Production build |
+| `npm run lint` | ESLint kontrolü |
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Proje yapısı
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+src/
+├── App.js                 # Rotalar ve global state
+├── pages/
+│   ├── Login.jsx          # Müşteri / admin girişi
+│   ├── Status.jsx         # Admin paneli
+│   ├── NewDevice.jsx      # Yeni cihaz kaydı
+│   └── CustomerStatus.jsx # Müşteri takip ekranı
+├── components/            # Navbar, Alert, QR, modal...
+├── utils/                 # storage, validasyon, referans yardımcıları
+└── config/auth.js         # Admin oturum ayarları
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+database/                  # PostgreSQL şeması (henüz bağlı değil)
+├── schema.sql
+├── sample_data.sql
+└── DATABASE.md
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Veritabanı
 
-## Learn More
+`database/` klasöründe production için hazırlanmış PostgreSQL şeması bulunur. Frontend şu an veritabanına bağlanmaz; tüm veriler tarayıcıda saklanır. Kurulum ve detaylar için [`database/DATABASE.md`](database/DATABASE.md) dosyasına bakın.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Notlar
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Bu sürüm bir **prototip**tir; müşteri şifreleri `localStorage`'da düz metin olarak tutulur.
+- Production kullanımı için backend API ve PostgreSQL entegrasyonu gerekir.

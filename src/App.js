@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from "react";
+import { Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Status from "./pages/Status";
 import CustomerStatus from "./pages/CustomerStatus";
 import Login from "./pages/Login";
+import { ADMIN_SESSION_KEY } from "./config/auth";
 import { loadDevices, saveDevices } from "./utils/deviceStorage";
 
-const ADMIN_SESSION_KEY = "adminLoggedIn";
-
 function App() {
-  const [page, setPage] = useState(() => {
-    const savedAdmin = sessionStorage.getItem(ADMIN_SESSION_KEY);
-    return savedAdmin === "true" ? "admin" : "login";
-  });
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [customerId, setCustomerId] = useState(null);
   const [isAdmin, setIsAdmin] = useState(
     () => sessionStorage.getItem(ADMIN_SESSION_KEY) === "true"
   );
-
   const [devices, setDevices] = useState(() => loadDevices());
 
   useEffect(() => {
@@ -39,69 +37,90 @@ function App() {
   const handleAdminLogin = () => {
     sessionStorage.setItem(ADMIN_SESSION_KEY, "true");
     setIsAdmin(true);
-    setPage("admin");
+    navigate("/admin");
   };
 
   const handleAdminLogout = () => {
     sessionStorage.removeItem(ADMIN_SESSION_KEY);
     setIsAdmin(false);
-    setPage("login");
+    setCustomerId(null);
+    navigate("/");
   };
 
   const goHome = () => {
     if (isAdmin) {
-      setPage("admin");
+      navigate("/admin");
     } else {
-      setPage("login");
       setCustomerId(null);
+      navigate("/");
     }
   };
 
+  const showNavbar =
+    location.pathname !== "/" && location.pathname !== "/admin/giris";
+
   return (
     <>
-      {page !== "login" && (
-        <Navbar
-          setPage={setPage}
-          isAdmin={isAdmin}
-          onHome={goHome}
-          onLogout={handleAdminLogout}
-        />
+      {showNavbar && (
+        <Navbar isAdmin={isAdmin} onHome={goHome} onLogout={handleAdminLogout} />
       )}
 
-      {page === "login" && (
-        <Login
-          devices={devices}
-          setPage={setPage}
-          setCustomerId={setCustomerId}
-          onAdminLogin={handleAdminLogin}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Login
+              devices={devices}
+              setCustomerId={setCustomerId}
+              onAdminLogin={handleAdminLogin}
+            />
+          }
         />
-      )}
 
-      {page === "admin" && isAdmin && (
-        <Status devices={devices} setDevices={setDevices} />
-      )}
-
-      {page === "admin" && !isAdmin && (
-        <Login
-          devices={devices}
-          setPage={setPage}
-          setCustomerId={setCustomerId}
-          onAdminLogin={handleAdminLogin}
-          forceAdmin
+        <Route
+          path="/admin/giris"
+          element={
+            <Login
+              devices={devices}
+              setCustomerId={setCustomerId}
+              onAdminLogin={handleAdminLogin}
+              forceAdmin
+            />
+          }
         />
-      )}
 
-      {page === "customer" && (
-        <CustomerStatus
-          devices={devices}
-          setDevices={setDevices}
-          customerId={customerId}
-          onBack={() => {
-            setCustomerId(null);
-            setPage("login");
-          }}
+        <Route
+          path="/admin"
+          element={
+            isAdmin ? (
+              <Status devices={devices} setDevices={setDevices} />
+            ) : (
+              <Navigate to="/admin/giris" replace />
+            )
+          }
         />
-      )}
+
+        <Route
+          path="/takip"
+          element={
+            customerId ? (
+              <CustomerStatus
+                devices={devices}
+                setDevices={setDevices}
+                customerId={customerId}
+                onBack={() => {
+                  setCustomerId(null);
+                  navigate("/");
+                }}
+              />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
+
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </>
   );
 }

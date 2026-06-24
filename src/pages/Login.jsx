@@ -1,11 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Alert from "../components/Alert";
+import { ADMIN_USER, ADMIN_PASS } from "../config/auth";
 import { findDeviceByCustomerInput } from "../utils/statusHelpers";
 import { loadDevices } from "../utils/deviceStorage";
 import "./Login.css";
-
-const ADMIN_USER = "admin";
-const ADMIN_PASS = "admin123";
 
 function getExampleReferans() {
   const n = new Date();
@@ -15,7 +14,8 @@ function getExampleReferans() {
   return `CIH-${y}${m}${d}-0001`;
 }
 
-function Login({ devices = [], setPage, setCustomerId, onAdminLogin, forceAdmin = false }) {
+function Login({ devices = [], setCustomerId, onAdminLogin, forceAdmin = false }) {
+  const navigate = useNavigate();
   const [view, setView] = useState(forceAdmin ? "admin" : "home");
   const [inputId, setInputId] = useState("");
   const [customerPass, setCustomerPass] = useState("");
@@ -63,7 +63,7 @@ function Login({ devices = [], setPage, setCustomerId, onAdminLogin, forceAdmin 
     }
 
     setCustomerId(result.deviceId);
-    setPage("customer");
+    navigate("/takip");
   };
 
   const handleAdminSubmit = (e) => {
@@ -88,7 +88,7 @@ function Login({ devices = [], setPage, setCustomerId, onAdminLogin, forceAdmin 
     <button
       type="button"
       className="admin-entry-btn"
-      onClick={() => setView("admin")}
+      onClick={() => navigate("/admin/giris")}
       aria-label="Admin girişi"
     >
       Admin
@@ -155,11 +155,7 @@ function Login({ devices = [], setPage, setCustomerId, onAdminLogin, forceAdmin 
 
         <div className="login-box">
           {forceAdmin && (
-            <button
-              type="button"
-              className="login-back"
-              onClick={() => setPage("login")}
-            >
+            <button type="button" className="login-back" onClick={() => navigate("/")}>
               ← Ana menü
             </button>
           )}

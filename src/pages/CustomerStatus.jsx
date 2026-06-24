@@ -101,9 +101,11 @@ function CustomerStatus({ devices, setDevices, customerId, onBack }) {
       <Alert message={toast} type="success" onClose={() => setToast("")} />
 
       <div className="customer-card">
-        <div className="customer-card__row">
+        <div className="customer-card__row customer-card__row--referans">
           <span>Referans No</span>
-          <strong className="customer-ref-no">{getReferansNo(device)}</strong>
+          <div className="customer-ref-block">
+            <strong className="customer-ref-no">{getReferansNo(device)}</strong>
+          </div>
         </div>
         {device.adSoyad && (
           <div className="customer-card__row">
