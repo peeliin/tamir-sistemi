@@ -27,7 +27,6 @@ function NewDevice({ devices, setDevices, onSuccess }) {
   const [form, setForm] = useState(initialForm);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [createdReferans, setCreatedReferans] = useState("");
 
   const update = (field, value) => {
     setForm((prev) => {
@@ -128,7 +127,6 @@ function NewDevice({ devices, setDevices, onSuccess }) {
 
     setDevices([...devices, newDevice]);
     setForm(initialForm);
-    setCreatedReferans(referansNo);
     setSuccess(`Kayıt oluşturuldu. Referans No: ${referansNo}`);
     if (onSuccess) onSuccess(referansNo);
   };

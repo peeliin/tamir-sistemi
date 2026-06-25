@@ -6,7 +6,6 @@ Telefon, PC ve tablet tamir kayıtlarını yönetmek ve müşterilerin cihaz dur
 
 - **Admin paneli:** Cihaz kaydı, durum güncelleme, fiyat belirleme, onaya gönderme, tamir/teslim
 - **Müşteri takibi:** Referans no + şifre ile giriş, durum timeline'ı, fiyat onayı/reddi
-- **Referans QR kodu:** Yeni kayıt ve müşteri ekranında referans numarası QR olarak gösterilir
 - **Veri saklama:** Tarayıcı `localStorage` (prototip aşaması)
 
 ## Kurulum
@@ -55,7 +54,7 @@ src/
 │   ├── Status.jsx         # Admin paneli
 │   ├── NewDevice.jsx      # Yeni cihaz kaydı
 │   └── CustomerStatus.jsx # Müşteri takip ekranı
-├── components/            # Navbar, Alert, QR, modal...
+├── components/            # Navbar, Alert, modal...
 ├── utils/                 # storage, validasyon, referans yardımcıları
 └── config/auth.js         # Admin oturum ayarları
 
