@@ -61,20 +61,63 @@ describe("parseCustomerId", () => {
     expect(result.referansNo).toBe("CIH-20260609-0003");
   });
 
+  it("CHZ formatlarını kabul eder (tireli, tiresiz, boşluklu)", () => {
+    const res1 = parseCustomerId("CHZ-10001");
+    expect(res1.valid).toBe(true);
+    expect(res1.referansNo).toBe("CHZ-10001");
+
+    const res2 = parseCustomerId("chz10002");
+    expect(res2.valid).toBe(true);
+    expect(res2.referansNo).toBe("CHZ-10002");
+
+    const res3 = parseCustomerId("CHZ 10003");
+    expect(res3.valid).toBe(true);
+    expect(res3.referansNo).toBe("CHZ-10003");
+  });
+
   it("boş girişi reddeder", () => {
     expect(parseCustomerId("").valid).toBe(false);
   });
 });
 
 describe("findDeviceByCustomerInput", () => {
+  const devices = [
+    { id: 1, referansNo: "CHZ-10001", eskiReferansNo: "CIH-20260609-0001", durum: "Beklemede" },
+    { id: 2, referansNo: "CHZ-10002", eskiReferansNo: "TRK-2026-2", durum: "Tamirde" },
+    { id: 3, referansNo: "CHZ-10003", durum: "Hazır" },
+  ];
+
   it("referans numarası ile cihaz bulur", () => {
-    const result = findDeviceByCustomerInput(sampleDevices, "CIH-20260609-0002");
+    const result = findDeviceByCustomerInput(devices, "CHZ-10001");
+    expect(result.found).toBe(true);
+    expect(result.deviceId).toBe(1);
+  });
+
+  it("tiresiz referans numarası ile cihaz bulur", () => {
+    const result = findDeviceByCustomerInput(devices, "chz10002");
     expect(result.found).toBe(true);
     expect(result.deviceId).toBe(2);
   });
 
+  it("eski referans numarası ile cihaz bulur (eskiReferansNo)", () => {
+    const result = findDeviceByCustomerInput(devices, "CIH-20260609-0001");
+    expect(result.found).toBe(true);
+    expect(result.deviceId).toBe(1);
+  });
+
+  it("son hane (suffix) ile cihaz bulur (CHZ ve CIH son ekleri)", () => {
+    const res1 = findDeviceByCustomerInput(devices, "10003");
+    expect(res1.found).toBe(true);
+    expect(res1.deviceId).toBe(3);
+
+    // Eski CIH son eki (0001 -> CIH-20260609-0001 / CHZ-10001 eskiRef)
+    const res2 = findDeviceByCustomerInput(devices, "0001");
+    expect(res2.found).toBe(true);
+    expect(res2.deviceId).toBe(1);
+  });
+
   it("olmayan kayıtta bulunamadı döner", () => {
-    const result = findDeviceByCustomerInput(sampleDevices, "CIH-20990101-9999");
+    const result = findDeviceByCustomerInput(devices, "CHZ-99999");
     expect(result.found).toBe(false);
   });
 });

@@ -47,19 +47,15 @@ export const STATUS_LABELS = {
 
 
 export function getStatusGroup(durum) {
-
   if (!durum) return "pending";
-
+  if (durum === "İnceleniyor") return "inceleniyor";
+  if (durum === "Başlandı") return "baslandi";
+  if (durum === "Tamamlandı") return "delivered";
   if (DELIVERED_STATUSES.includes(durum)) return "delivered";
-
   if (APPROVED_STATUSES.includes(durum)) return "approved";
-
   if (PENDING_STATUSES.includes(durum)) return "pending";
-
   if (durum === "Reddedildi") return "pending";
-
   return "pending";
-
 }
 
 
@@ -167,12 +163,14 @@ function buildCihReferans(datePart, seqPart) {
 
 
 export function parseCustomerId(input) {
-
   const trimmed = normalizeCustomerInput(input);
-
   if (!trimmed) return { valid: false, error: "empty" };
 
-
+  // CHZ-10001, CHZ10001, CHZ 10001 gibi esnek girişleri tanı
+  const chzMatch = trimmed.match(/^CHZ-?(\d+)$/i);
+  if (chzMatch) {
+    return { valid: true, referansNo: `CHZ-${chzMatch[1]}` };
+  }
 
   const fullMatch = trimmed.match(/^TRK-2026-(\d+)$/i);
 
@@ -249,14 +247,19 @@ function findByReferansKey(list, key) {
   if (!key) return null;
 
   const target = normalizeReferansKey(key);
+  const targetAlpha = target.replace(/[^A-Z0-9]/g, "");
 
   return (
 
     list.find((d) => {
 
-      const refs = [d.referansNo, getReferansNo(d)].filter(Boolean);
+      // Hem güncel referansNo, hem eskiReferansNo hem de geriye dönük id referansını kontrol et
+      const refs = [d.referansNo, d.eskiReferansNo, getReferansNo(d)].filter(Boolean);
 
-      return refs.some((ref) => normalizeReferansKey(ref) === target);
+      return refs.some((ref) => {
+        const normRef = normalizeReferansKey(ref);
+        return normRef === target || normRef.replace(/[^A-Z0-9]/g, "") === targetAlpha;
+      });
 
     }) || null
 
@@ -270,13 +273,25 @@ function findBySuffix(list, digits) {
 
   if (!digits) return null;
 
-  const suffix = normalizeCihSuffix(digits);
-
   const matches = list.filter((d) => {
 
     const ref = getReferansNo(d);
+    const normRef = normalizeReferansKey(ref);
+    const normEski = d.eskiReferansNo ? normalizeReferansKey(d.eskiReferansNo) : "";
 
-    return ref.endsWith(`-${suffix}`) || ref.endsWith(suffix);
+    // 1. Doğrudan son ek eşleşmesi (örn. CHZ-10001 için 10001 girişi)
+    if (ref.endsWith(digits) || normRef.endsWith(digits) || (normEski && normEski.endsWith(digits))) {
+      return true;
+    }
+
+    // 2. Geriye dönük 4 haneli CIH son eki eşleşmesi
+    const suffix = normalizeCihSuffix(digits);
+
+    return (
+      ref.endsWith(`-${suffix}`) || 
+      ref.endsWith(suffix) || 
+      (normEski && (normEski.endsWith(`-${suffix}`) || normEski.endsWith(suffix)))
+    );
 
   });
 

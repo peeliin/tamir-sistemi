@@ -1,8 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import NotificationPanel from "./NotificationPanel";
 import "./Navbar.css";
 
-function Navbar({ isAdmin, onHome, onLogout }) {
+function Navbar({ isAdmin, onHome, onLogout, devices, setDevices }) {
   const navigate = useNavigate();
 
   return (
@@ -12,6 +13,9 @@ function Navbar({ isAdmin, onHome, onLogout }) {
       </button>
 
       <div className="navbar__links">
+        {isAdmin && devices && setDevices && (
+          <NotificationPanel devices={devices} setDevices={setDevices} />
+        )}
         {isAdmin && (
           <button type="button" onClick={() => navigate("/admin")}>
             Admin Panel

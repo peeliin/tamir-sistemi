@@ -1,23 +1,32 @@
 .status-badge {
-  display: inline-block;
-  padding: 4px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
+  letter-spacing: 0.3px;
 }
 
 .status-badge--pending {
   background: #fef3c7;
-  color: #92400e;
+  color: #b45309;
 }
 
 .status-badge--approved {
-  background: #dbeafe;
-  color: #1e40af;
+  background: var(--primary-light);
+  color: var(--primary-dark);
 }
 
 .status-badge--delivered {
-  background: #d1fae5;
-  color: #065f46;
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.status-badge--inceleniyor,
+.status-badge--baslandi {
+  background: #e0e7ff;
+  color: #4338ca;
 }

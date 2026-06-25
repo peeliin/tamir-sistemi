@@ -11,6 +11,8 @@ function ResponsiveDeviceList({
   onDeliver,
   onDelete,
   onEditToggle,
+  onOpenChat,
+  onOpenDetail,
   editingId,
 }) {
   if (devices.length === 0) {
@@ -19,6 +21,7 @@ function ResponsiveDeviceList({
 
   const renderActions = (d) => (
     <div className="device-actions">
+
       {(d.durum === "Beklemede" || d.durum === "Cihaz Alındı") && (
         <button type="button" className="action-btn action-btn--primary" onClick={() => onSendToCustomer(d.id)}>
           Onayla
@@ -43,11 +46,16 @@ function ResponsiveDeviceList({
         </button>
       )}
       {d.durum === "Teslim Edildi" && <span className="action-done">Tamamlandı</span>}
-      <button type="button" className="action-btn action-btn--ghost" onClick={() => onEditToggle(d.id)}>
-        {editingId === d.id ? "Kapat" : "Düzenle"}
-      </button>
       <button type="button" className="action-btn action-btn--danger" onClick={() => onDelete(d.id)}>
         Sil
+      </button>
+      <button
+        type="button"
+        className="action-btn action-btn--detail"
+        style={{ background: "#3b82f6", color: "white" }}
+        onClick={() => onOpenDetail(d.id)}
+      >
+        Detay
       </button>
     </div>
   );
@@ -80,25 +88,36 @@ function ResponsiveDeviceList({
         )}
       </td>
       <td data-label="Fiyat">
-        <div className="price-box">
-          <button
-            type="button"
-            onClick={() => onInputChange(d.id, "fiyat", Math.max(0, Number(d.fiyat || 0) - 50))}
-          >
-            -
-          </button>
-          <input
-            type="number"
-            value={d.fiyat ?? 0}
-            onChange={(e) => onInputChange(d.id, "fiyat", e.target.value)}
-          />
-          <button
-            type="button"
-            onClick={() => onInputChange(d.id, "fiyat", Number(d.fiyat || 0) + 50)}
-          >
-            +
-          </button>
-        </div>
+        {((d.durum !== "Beklemede" && d.durum !== "Cihaz Alındı") || d.arizalar?.some(a => a.bildirimYapildi)) && d.fiyat > 0 ? (
+          <span className="price-locked">{d.fiyat} ₺</span>
+        ) : (
+          <div className="price-box">
+            <button
+              type="button"
+              disabled={(d.durum !== "Beklemede" && d.durum !== "Cihaz Alındı") || d.arizalar?.some(a => a.bildirimYapildi)}
+              onClick={() => onInputChange(d.id, "fiyat", Math.max(0, Number(d.fiyat || 0) - 50))}
+            >
+              -
+            </button>
+            <input
+              type="number"
+              value={d.fiyat ?? 0}
+              disabled={(d.durum !== "Beklemede" && d.durum !== "Cihaz Alındı") || d.arizalar?.some(a => a.bildirimYapildi)}
+              onChange={(e) => {
+                // Controller mantığı olarak da View'da inaktif durumda değişimi engelliyoruz
+                if ((d.durum !== "Beklemede" && d.durum !== "Cihaz Alındı") || d.arizalar?.some(a => a.bildirimYapildi)) return;
+                onInputChange(d.id, "fiyat", e.target.value);
+              }}
+            />
+            <button
+              type="button"
+              disabled={(d.durum !== "Beklemede" && d.durum !== "Cihaz Alındı") || d.arizalar?.some(a => a.bildirimYapildi)}
+              onClick={() => onInputChange(d.id, "fiyat", Number(d.fiyat || 0) + 50)}
+            >
+              +
+            </button>
+          </div>
+        )}
       </td>
       <td data-label="Durum">
         <StatusBadge durum={d.durum} />
@@ -144,15 +163,35 @@ function ResponsiveDeviceList({
                 <option>Diğer</option>
               </select>
             )}
-            <div className="price-box device-card__price">
-              <button type="button" onClick={() => onInputChange(d.id, "fiyat", Math.max(0, Number(d.fiyat || 0) - 50))}>-</button>
-              <input
-                type="number"
-                value={d.fiyat ?? 0}
-                onChange={(e) => onInputChange(d.id, "fiyat", e.target.value)}
-              />
-              <button type="button" onClick={() => onInputChange(d.id, "fiyat", Number(d.fiyat || 0) + 50)}>+</button>
-            </div>
+            {((d.durum !== "Beklemede" && d.durum !== "Cihaz Alındı") || d.arizalar?.some(a => a.bildirimYapildi)) && d.fiyat > 0 ? (
+              <p className="device-card__meta">Fiyat: <strong>{d.fiyat} ₺</strong> (Onaylı)</p>
+            ) : (
+              <div className="price-box device-card__price">
+                <button
+                  type="button"
+                  disabled={(d.durum !== "Beklemede" && d.durum !== "Cihaz Alındı") || d.arizalar?.some(a => a.bildirimYapildi)}
+                  onClick={() => onInputChange(d.id, "fiyat", Math.max(0, Number(d.fiyat || 0) - 50))}
+                >
+                  -
+                </button>
+                <input
+                  type="number"
+                  value={d.fiyat ?? 0}
+                  disabled={(d.durum !== "Beklemede" && d.durum !== "Cihaz Alındı") || d.arizalar?.some(a => a.bildirimYapildi)}
+                  onChange={(e) => {
+                    if ((d.durum !== "Beklemede" && d.durum !== "Cihaz Alındı") || d.arizalar?.some(a => a.bildirimYapildi)) return;
+                    onInputChange(d.id, "fiyat", e.target.value);
+                  }}
+                />
+                <button
+                  type="button"
+                  disabled={(d.durum !== "Beklemede" && d.durum !== "Cihaz Alındı") || d.arizalar?.some(a => a.bildirimYapildi)}
+                  onClick={() => onInputChange(d.id, "fiyat", Number(d.fiyat || 0) + 50)}
+                >
+                  +
+                </button>
+              </div>
+            )}
             {renderActions(d)}
           </article>
         ))}

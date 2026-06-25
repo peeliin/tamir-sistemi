@@ -62,7 +62,13 @@ function App() {
   return (
     <>
       {showNavbar && (
-        <Navbar isAdmin={isAdmin} onHome={goHome} onLogout={handleAdminLogout} />
+        <Navbar
+          isAdmin={isAdmin}
+          onHome={goHome}
+          onLogout={handleAdminLogout}
+          devices={devices}
+          setDevices={setDevices}
+        />
       )}
 
       <Routes>

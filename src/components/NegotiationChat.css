@@ -1,0 +1,405 @@
+.negotiation-chat {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: 520px;
+  box-shadow: var(--shadow-md);
+}
+
+.negotiation-chat__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: var(--bg-main);
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.negotiation-chat__header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.negotiation-chat__price {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.negotiation-chat__notice {
+  margin: 0;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: #b45309;
+  background: #fef3c7;
+  border-bottom: 1px solid #fde68a;
+  font-weight: 500;
+}
+
+.negotiation-chat__messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 16px;
+  min-height: 200px;
+  max-height: 280px;
+  background: var(--bg-main);
+}
+
+.negotiation-chat__empty {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+  margin: 24px 0;
+  font-style: italic;
+}
+
+.chat-bubble {
+  max-width: 85%;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  box-shadow: var(--shadow-sm);
+}
+
+.chat-bubble--them {
+  margin-right: auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-bottom-left-radius: 4px;
+}
+
+.chat-bubble--me {
+  margin-left: auto;
+  background: var(--primary-light);
+  border: 1px solid var(--primary);
+  color: var(--primary-dark);
+  border-bottom-right-radius: 4px;
+}
+
+.chat-bubble--discount_request {
+  border-width: 2px;
+  background: #fffbeb;
+  border-color: var(--warning);
+  color: var(--text-main);
+}
+
+.chat-bubble--admin_decision {
+  border-width: 2px;
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary-dark);
+}
+
+.chat-bubble__meta {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  opacity: 0.8;
+}
+
+.chat-bubble p {
+  margin: 0;
+}
+
+.chat-bubble__offer strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--text-main);
+}
+
+.chat-bubble__price-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.chat-bubble__highlight {
+  font-weight: 700;
+  color: var(--success);
+}
+
+.chat-bubble__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.chat-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.chat-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chat-btn--approve {
+  background: var(--success);
+  color: #fff;
+}
+
+.chat-btn--approve:hover:not(:disabled) {
+  background: var(--success-hover);
+}
+
+.chat-btn--reject {
+  background: var(--danger);
+  color: #fff;
+}
+
+.chat-btn--reject:hover:not(:disabled) {
+  background: var(--danger-hover);
+}
+
+.chat-btn--offer {
+  background: var(--info);
+  color: #fff;
+}
+
+.chat-btn--send {
+  background: var(--primary);
+  color: #fff;
+}
+
+.chat-btn--send:hover:not(:disabled) {
+  background: var(--primary-dark);
+}
+
+.chat-btn--discount {
+  width: 100%;
+  margin-top: 8px;
+  background: var(--warning);
+  color: #fff;
+}
+
+.negotiation-chat__error {
+  margin: 0;
+  padding: 10px 16px;
+  font-size: 13px;
+  color: var(--danger);
+  background: #fef2f2;
+}
+
+.negotiation-chat__pending {
+  padding: 10px 16px;
+  font-size: 13px;
+  background: #ecfdf5;
+  color: #065f46;
+  border-top: 1px solid #a7f3d0;
+  font-weight: 500;
+}
+
+.negotiation-chat__composer {
+  padding: 16px;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-card);
+}
+
+.negotiation-chat__discount label {
+  display: block;
+  font-size: 13px;
+  color: var(--text-main);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.negotiation-chat__discount-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.negotiation-chat__discount-row input[type="range"] {
+  flex: 1;
+  accent-color: var(--primary);
+}
+
+.negotiation-chat__discount-value {
+  font-weight: 700;
+  color: var(--warning);
+  min-width: 36px;
+}
+
+.negotiation-chat__discount-preview {
+  font-weight: 700;
+  color: var(--success);
+  min-width: 64px;
+  text-align: right;
+}
+
+.negotiation-chat__admin-counter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.negotiation-chat__admin-counter label {
+  font-size: 13px;
+  color: var(--text-main);
+  width: 100%;
+  font-weight: 500;
+}
+
+.negotiation-chat__admin-counter input {
+  flex: 1;
+  min-width: 100px;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.negotiation-chat__admin-counter input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.negotiation-chat__form {
+  display: flex;
+  gap: 10px;
+}
+
+.negotiation-chat__form input {
+  flex: 1;
+  padding: 12px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.negotiation-chat__form input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+/* Modal wrapper */
+.negotiation-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.negotiation-modal {
+  background: var(--bg-card);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border-color);
+}
+
+.negotiation-modal__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.negotiation-modal__head h3 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.negotiation-modal__close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 4px 8px;
+  transition: color 0.2s;
+}
+
+.negotiation-modal__close:hover {
+  color: var(--text-main);
+}
+
+.negotiation-modal .negotiation-chat {
+  border: none;
+  border-radius: 0;
+  max-height: none;
+  flex: 1;
+  box-shadow: none;
+}
+
+.negotiation-modal .negotiation-chat__header {
+  display: none;
+}
+
+.action-btn--chat {
+  background: var(--primary);
+  color: #fff;
+  position: relative;
+}
+
+.action-btn--chat:hover {
+  background: var(--primary-dark);
+}
+
+.chat-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--danger);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 480px) {
+  .negotiation-chat__messages {
+    max-height: 220px;
+  }
+
+  .chat-bubble {
+    max-width: 95%;
+  }
+}

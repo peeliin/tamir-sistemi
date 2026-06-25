@@ -3,12 +3,18 @@
 }
 
 .device-card {
-  background: white;
-  border-radius: 10px;
-  padding: 16px;
-  margin-bottom: 12px;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e5e7eb;
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.device-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-light);
 }
 
 .device-card__header {
@@ -16,102 +22,157 @@
   justify-content: space-between;
   align-items: center;
   gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   flex-wrap: wrap;
 }
 
 .device-card__ref-label {
   display: block;
   font-size: 11px;
-  color: #6b7280;
+  color: var(--text-muted);
   font-weight: 500;
   margin-bottom: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .ref-no {
   font-family: ui-monospace, "Cascadia Code", monospace;
-  font-size: 13px;
-  color: #1e3a8a;
+  font-size: 14px;
+  color: var(--primary-dark);
   word-break: break-all;
+  font-weight: 600;
 }
 
 .ref-cell .ref-no {
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .device-card__type {
-  color: #6b7280;
+  color: var(--text-muted);
   font-weight: normal;
 }
 
 .device-card__meta {
   font-size: 14px;
-  color: #4b5563;
-  margin: 4px 0;
+  color: var(--text-main);
+  margin: 6px 0;
 }
 
 .device-card__select {
   width: 100%;
-  margin: 8px 0;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-main);
+  transition: all 0.2s;
+}
+
+.device-card__select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
 }
 
 .device-card__price {
-  margin: 10px 0;
+  margin: 12px 0;
 }
 
 .device-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 10px;
+  gap: 8px;
+  margin-top: 14px;
 }
 
 .action-btn {
-  padding: 6px 12px;
+  padding: 8px 14px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 13px;
   cursor: pointer;
   white-space: nowrap;
+  font-weight: 600;
+  transition: all 0.2s ease;
 }
 
 .action-btn--primary {
-  background: #3f51b5;
+  background: var(--primary);
   color: white;
+}
+
+.action-btn--primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
 }
 
 .action-btn--success {
-  background: #16a34a;
+  background: var(--success);
   color: white;
 }
 
+.action-btn--success:hover {
+  background: var(--success-hover);
+}
+
 .action-btn--ghost {
-  background: #f3f4f6;
-  color: #374151;
+  background: var(--bg-main);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+.action-btn--ghost:hover {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  border-color: var(--primary);
 }
 
 .action-btn--danger {
   background: #fef2f2;
-  color: #dc2626;
+  color: var(--danger);
 }
 
 .action-hint {
   font-size: 12px;
-  color: #6b7280;
+  color: var(--text-muted);
   align-self: center;
 }
 
 .action-done {
   font-size: 13px;
-  color: #16a34a;
+  color: var(--success);
   align-self: center;
+  font-weight: 500;
 }
 
 .table-wrapper--desktop {
   overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+}
+
+/* Modernize Desktop Table styles if they are here */
+.device-table th {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  padding: 14px;
+}
+
+.device-table td {
+  padding: 14px;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+
+.device-table tr:hover td {
+  background: var(--bg-main);
 }
 
 @media (max-width: 768px) {

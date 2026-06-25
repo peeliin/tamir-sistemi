@@ -1,45 +1,50 @@
 .customer-container {
   padding: 30px;
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
 }
 
 .customer-container h2 {
   margin-bottom: 20px;
+  color: var(--primary);
 }
 
 /* kart */
 .card {
-  background: #f9f9f9;
-  padding: 20px;
-  border-radius: 10px;
+  background: var(--bg-card);
+  padding: 24px;
+  border-radius: 12px;
   max-width: 400px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
 }
 
 /* durum badge */
 .status {
   margin-left: 10px;
-  padding: 5px 10px;
+  padding: 6px 12px;
   border-radius: 8px;
   font-size: 13px;
+  font-weight: 600;
 }
 
 /* DURUM RENKLERİ (SADE İSİM) */
 .status.beklemede {
-  background: #ddd;
+  background: var(--bg-main);
+  color: var(--text-muted);
 }
 
 .status.onaybekliyor {
-  background: orange;
+  background: var(--warning);
   color: white;
 }
 
 .status.onaylandi {
-  background: green;
+  background: var(--success);
   color: white;
 }
 
 .status.reddedildi {
-  background: red;
+  background: var(--danger);
   color: white;
 }
 
@@ -47,29 +52,44 @@
 .buttons {
   margin-top: 20px;
   display: flex;
-  gap: 10px;
+  gap: 12px;
 }
 
 .approve {
-  background-color: #4caf50;
+  background-color: var(--success);
   border: none;
-  padding: 10px;
+  padding: 12px;
   color: white;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.approve:hover {
+  background-color: var(--success-hover);
 }
 
 .reject {
-  background-color: #f44336;
+  background-color: var(--danger);
   border: none;
-  padding: 10px;
+  padding: 12px;
   color: white;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.reject:hover {
+  background-color: var(--danger-hover);
 }
 
 /* cihaz yok */
 .not-found {
-  padding: 20px;
-  color: red;
+  padding: 24px;
+  color: var(--danger);
+  background: #fef2f2;
+  border-radius: 12px;
+  border: 1px solid #fecaca;
 }

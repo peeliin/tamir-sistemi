@@ -1,3 +1,37 @@
+:root {
+  /* Purple Theme Color Palette */
+  --primary: #6b21a8;        /* Main purple */
+  --primary-hover: #9333ea;  /* Lighter purple for hover */
+  --primary-light: #f3e8ff;  /* Very light purple background */
+  --primary-dark: #4c1d95;   /* Dark purple for active/focus */
+  
+  --bg-main: #f8fafc;        /* App background */
+  --bg-card: #ffffff;        /* Card background */
+  
+  --text-main: #1e293b;      /* Main text */
+  --text-muted: #64748b;     /* Muted/secondary text */
+  
+  --border-color: #e2e8f0;   /* Light border */
+  
+  /* Status Colors (Aesthetic Pastel Tones) */
+  --success: #34d399;        /* Pastel Green */
+  --success-hover: #10b981;
+  
+  --danger: #fb7185;         /* Pastel Rose/Red */
+  --danger-hover: #f43f5e;
+  
+  --warning: #fb923c;        /* Pastel Orange/Peach */
+  --warning-hover: #f97316;
+  
+  --info: #818cf8;           /* Pastel Indigo/Blue */
+  --info-hover: #6366f1;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
 *,
 *::before,
 *::after {
@@ -10,12 +44,13 @@ html {
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
-  background: #f4f6f9;
+  background: var(--bg-main);
+  color: var(--text-main);
 }
 
 code {
@@ -24,4 +59,5 @@ code {
 
 button {
   font-family: inherit;
+  transition: all 0.2s ease-in-out;
 }

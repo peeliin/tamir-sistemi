@@ -4,6 +4,8 @@ import Alert from "../components/Alert";
 import ConfirmModal from "../components/ConfirmModal";
 import DashboardCard from "../components/DashboardCard";
 import ResponsiveDeviceList from "../components/ResponsiveDeviceList";
+import NegotiationModal from "../components/NegotiationModal";
+import DeviceDetailModal from "../components/DeviceDetailModal";
 import {
   countByGroup,
   filterByGroup,
@@ -17,6 +19,8 @@ function Status({ devices, setDevices }) {
   const [editingId, setEditingId] = useState(null);
   const [toast, setToast] = useState({ message: "", type: "info" });
   const [confirm, setConfirm] = useState(null);
+  const [chatDeviceId, setChatDeviceId] = useState(null);
+  const [detailDeviceId, setDetailDeviceId] = useState(null);
 
   const pendingCount = countByGroup(devices, "pending");
   const approvedCount = countByGroup(devices, "approved");
@@ -42,6 +46,13 @@ function Status({ devices, setDevices }) {
   });
 
   const handleInputChange = (id, field, value) => {
+    if (field === "fiyat") {
+      const d = devices.find((x) => x.id === id);
+      if (d) {
+        const isLocked = (d.durum !== "Beklemede" && d.durum !== "Cihaz Alındı") || d.arizalar?.some(a => a.bildirimYapildi);
+        if (isLocked) return;
+      }
+    }
     setDevices(
       devices.map((d) => (d.id === id ? { ...d, [field]: value } : d))
     );
@@ -116,6 +127,14 @@ function Status({ devices, setDevices }) {
   const handleFilterClick = (group) => {
     setStatusFilter((prev) => (prev === group ? null : group));
     setMode("list");
+  };
+
+  const chatDevice = chatDeviceId
+    ? devices.find((d) => d.id === chatDeviceId)
+    : null;
+
+  const updateChatDevice = (updated) => {
+    setDevices(devices.map((d) => (d.id === updated.id ? updated : d)));
   };
 
   return (
@@ -196,7 +215,28 @@ function Status({ devices, setDevices }) {
           onDeliver={deliverDevice}
           onDelete={deleteDevice}
           onEditToggle={handleEditToggle}
+          onOpenChat={setChatDeviceId}
+          onOpenDetail={setDetailDeviceId}
           editingId={editingId}
+        />
+      )}
+
+      {detailDeviceId && (
+        <DeviceDetailModal
+          device={devices.find((d) => d.id === detailDeviceId)}
+          onClose={() => setDetailDeviceId(null)}
+          onUpdate={(updatedDevice) => {
+            setDevices(devices.map((d) => (d.id === updatedDevice.id ? updatedDevice : d)));
+          }}
+        />
+      )}
+
+      {chatDevice && (
+        <NegotiationModal
+          device={chatDevice}
+          isAdmin
+          onUpdate={updateChatDevice}
+          onClose={() => setChatDeviceId(null)}
         />
       )}
 

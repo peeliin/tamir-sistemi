@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Alert from "../components/Alert";
 import { generateReferansNo } from "../utils/generateId";
 import { validateEmail, validatePhone } from "../utils/validation";
+import { sendWelcomeEmail } from "../services/emailService";
 import "./NewDevice.css";
 
 const CIHAZ_TURLERI = ["Telefon", "PC", "Tablet"];
@@ -20,13 +21,18 @@ const initialForm = {
   cihazTuru: "",
   marka: "",
   model: "",
-  arizaNot: "",
+  arizalar: [""],
 };
 
 function NewDevice({ devices, setDevices, onSuccess }) {
   const [form, setForm] = useState(initialForm);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [refNo, setRefNo] = useState(() => generateReferansNo(devices));
+
+  useEffect(() => {
+    setRefNo(generateReferansNo(devices));
+  }, [devices]);
 
   const update = (field, value) => {
     setForm((prev) => {
@@ -37,6 +43,29 @@ function NewDevice({ devices, setDevices, onSuccess }) {
       }
       return next;
     });
+  };
+
+  const updateAriza = (index, value) => {
+    setForm((prev) => {
+      const nextArizalar = [...prev.arizalar];
+      nextArizalar[index] = value;
+      return { ...prev, arizalar: nextArizalar };
+    });
+  };
+
+  const addArizaField = () => {
+    setForm((prev) => ({
+      ...prev,
+      arizalar: [...prev.arizalar, ""],
+    }));
+  };
+
+  const removeArizaField = (index) => {
+    if (form.arizalar.length <= 1) return;
+    setForm((prev) => ({
+      ...prev,
+      arizalar: prev.arizalar.filter((_, idx) => idx !== index),
+    }));
   };
 
   const markaOptions = form.cihazTuru ? MARKALAR[form.cihazTuru] || [] : [];
@@ -54,6 +83,11 @@ function NewDevice({ devices, setDevices, onSuccess }) {
     const phoneCheck = validatePhone(form.telefon);
     if (!phoneCheck.valid) {
       setError(phoneCheck.message);
+      return;
+    }
+
+    if (!form.email.trim()) {
+      setError("E-posta alanı zorunludur.");
       return;
     }
 
@@ -81,8 +115,9 @@ function NewDevice({ devices, setDevices, onSuccess }) {
       return;
     }
 
-    if (!form.arizaNot.trim()) {
-      setError("Arıza / not açıklaması zorunludur.");
+    const activeArizalar = form.arizalar.filter((not) => not.trim() !== "");
+    if (activeArizalar.length === 0) {
+      setError("En az 1 adet arıza açıklaması zorunludur.");
       return;
     }
 
@@ -97,11 +132,12 @@ function NewDevice({ devices, setDevices, onSuccess }) {
     }
 
     const id = Date.now();
-    const referansNo = generateReferansNo(devices);
+    // use the pre-generated refNo
+    const generatedRef = refNo;
 
     const newDevice = {
       id,
-      referansNo,
+      referansNo: generatedRef,
       adSoyad: form.adSoyad.trim(),
       telefon: form.telefon.trim(),
       email: form.email.trim(),
@@ -109,10 +145,19 @@ function NewDevice({ devices, setDevices, onSuccess }) {
       cihazTuru: form.cihazTuru,
       marka: markaValue,
       model: form.model.trim(),
-      arizaNot: form.arizaNot.trim(),
+      arizaNot: activeArizalar[0].trim(), // backward compatibility
       islem: "",
       fiyat: 0,
       durum: "Beklemede",
+      arizalar: activeArizalar.map((not, idx) => ({
+        id: idx + 1,
+        arizaNot: not.trim(),
+        islem: "",
+        fiyat: 0,
+        durum: "Beklemede",
+        bildirimYapildi: false,
+        onayli: null,
+      })),
       history: [
         {
           step: "Cihaz Alındı",
@@ -123,12 +168,18 @@ function NewDevice({ devices, setDevices, onSuccess }) {
           date: new Date().toLocaleString("tr-TR"),
         },
       ],
+      messages: [],
     };
 
     setDevices([...devices, newDevice]);
     setForm(initialForm);
-    setSuccess(`Kayıt oluşturuldu. Referans No: ${referansNo}`);
-    if (onSuccess) onSuccess(referansNo);
+
+    setSuccess(`Kayıt oluşturuldu. Referans No: ${generatedRef}`);
+    
+    // Cihaz sisteme ilk kez kaydedildiğinde tek seferlik mail at
+    sendWelcomeEmail(newDevice);
+
+    if (onSuccess) onSuccess(generatedRef);
   };
 
   return (
@@ -144,6 +195,16 @@ function NewDevice({ devices, setDevices, onSuccess }) {
       <form onSubmit={handleAdd}>
         <fieldset className="form-section">
           <legend>1. Kullanıcı Bilgileri</legend>
+
+          <label>
+            Referans Numarası (Otomatik)
+            <input
+              type="text"
+              value={refNo}
+              disabled
+              style={{ background: "#f3f4f6", color: "#6b7280", cursor: "not-allowed", fontWeight: "bold" }}
+            />
+          </label>
 
           <label>
             Ad Soyad *
@@ -166,7 +227,7 @@ function NewDevice({ devices, setDevices, onSuccess }) {
           </label>
 
           <label>
-            E-posta
+            E-posta *
             <input
               type="email"
               value={form.email}
@@ -237,15 +298,57 @@ function NewDevice({ devices, setDevices, onSuccess }) {
         <fieldset className="form-section">
           <legend>3. Servis / Arıza Bilgileri</legend>
 
-          <label>
-            Arıza / Not Açıklaması *
-            <textarea
-              rows={4}
-              value={form.arizaNot}
-              onChange={(e) => update("arizaNot", e.target.value)}
-              placeholder="Cihazdaki arıza veya ek notlar"
-            />
-          </label>
+          {form.arizalar.map((ariza, index) => (
+            <div key={index} className="ariza-input-row" style={{ display: "flex", gap: "8px", alignItems: "flex-start", marginBottom: "12px" }}>
+              <div style={{ flex: 1 }}>
+                <label style={{ display: "block", marginBottom: "4px" }}>
+                  Arıza Açıklaması #{index + 1} *
+                  <textarea
+                    rows={2}
+                    value={ariza}
+                    onChange={(e) => updateAriza(index, e.target.value)}
+                    placeholder="Cihazdaki arıza açıklamasını yazın"
+                    style={{ width: "100%", padding: "8px", boxSizing: "border-box", borderRadius: "6px", border: "1px solid #d1d5db" }}
+                  />
+                </label>
+              </div>
+              {form.arizalar.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removeArizaField(index)}
+                  style={{
+                    marginTop: "24px",
+                    background: "#dc2626",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "6px",
+                    padding: "8px 12px",
+                    cursor: "pointer",
+                    fontWeight: "600"
+                  }}
+                >
+                  Sil
+                </button>
+              )}
+            </div>
+          ))}
+
+          <button
+            type="button"
+            onClick={addArizaField}
+            style={{
+              background: "#16a34a",
+              color: "white",
+              border: "none",
+              borderRadius: "6px",
+              padding: "10px 16px",
+              cursor: "pointer",
+              fontWeight: "600",
+              marginTop: "8px"
+            }}
+          >
+            + Başka Arıza Ekle
+          </button>
         </fieldset>
 
         <button type="submit" className="new-device__submit">
