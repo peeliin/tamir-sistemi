@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import {
-  MAX_DISCOUNT_PERCENT,
   createMessage,
   getLatestPendingCounterOffer,
   getLatestPendingDiscountRequest,
@@ -254,8 +253,8 @@ function NegotiationChat({ device, isAdmin, onUpdate }) {
         )}
         {messages.map((msg) => {
           const isMe = isAdmin ? msg.sender === "admin" : msg.sender === "customer";
-          const senderName = isMe 
-            ? "Siz" 
+          const senderName = isMe
+            ? "Siz"
             : (isAdmin ? "Müşteri" : "Tekniker");
 
           return (
