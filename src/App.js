@@ -5,14 +5,27 @@ import Navbar from "./components/Navbar";
 import Status from "./pages/Status";
 import CustomerStatus from "./pages/CustomerStatus";
 import Login from "./pages/Login";
-import { ADMIN_SESSION_KEY } from "./config/auth";
+import { ADMIN_SESSION_KEY, CUSTOMER_SESSION_KEY } from "./config/auth";
 import { loadDevices, saveDevices } from "./utils/deviceStorage";
 
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [customerId, setCustomerId] = useState(null);
+  const [customerId, setCustomerIdState] = useState(() => {
+    const saved = sessionStorage.getItem(CUSTOMER_SESSION_KEY);
+    return saved || null;
+  });
+
+  const setCustomerId = (id) => {
+    if (id == null || id === "") {
+      sessionStorage.removeItem(CUSTOMER_SESSION_KEY);
+      setCustomerIdState(null);
+    } else {
+      sessionStorage.setItem(CUSTOMER_SESSION_KEY, String(id));
+      setCustomerIdState(id);
+    }
+  };
   const [isAdmin, setIsAdmin] = useState(
     () => sessionStorage.getItem(ADMIN_SESSION_KEY) === "true"
   );
@@ -43,7 +56,8 @@ function App() {
   const handleAdminLogout = () => {
     sessionStorage.removeItem(ADMIN_SESSION_KEY);
     setIsAdmin(false);
-    setCustomerId(null);
+    sessionStorage.removeItem(CUSTOMER_SESSION_KEY);
+    setCustomerIdState(null);
     navigate("/");
   };
 

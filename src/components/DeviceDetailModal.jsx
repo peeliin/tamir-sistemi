@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import StatusBadge from "./StatusBadge";
-import { getReferansNo } from "../utils/statusHelpers";
+import { getReferansNo, deriveOverallStatusFromArizalar } from "../utils/statusHelpers";
 import "./DeviceDetailModal.css";
 
 function DeviceDetailModal({ device, onClose, onUpdate }) {
@@ -83,21 +83,7 @@ function DeviceDetailModal({ device, onClose, onUpdate }) {
       return a;
     });
 
-    // Recalculate overall status:
-    // If all faults are Tamamlandı or Reddedildi, set overall to 'Hazır'
-    const allDone = updatedArizalar.every(
-      (a) => a.durum === "Tamamlandı" || a.durum === "Reddedildi"
-    );
-    const hasActive = updatedArizalar.some((a) => a.durum === "Başlandı");
-
-    let overallStatus = device.durum;
-    if (allDone) {
-      overallStatus = "Hazır";
-    } else if (hasActive) {
-      overallStatus = "Tamirde";
-    } else {
-      overallStatus = "Beklemede";
-    }
+    const overallStatus = deriveOverallStatusFromArizalar(updatedArizalar, device.durum);
 
     const updatedDevice = {
       ...device,

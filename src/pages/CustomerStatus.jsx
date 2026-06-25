@@ -3,7 +3,7 @@ import Alert from "../components/Alert";
 import StatusBadge from "../components/StatusBadge";
 import ConfirmModal from "../components/ConfirmModal";
 import CustomerChatWidget from "../components/CustomerChatWidget";
-import { getReferansNo } from "../utils/statusHelpers";
+import { getReferansNo, deriveOverallStatusFromArizalar } from "../utils/statusHelpers";
 import "./CustomerStatus.css";
 
 function CustomerStatus({ devices, setDevices, customerId, onBack }) {
@@ -74,8 +74,7 @@ function CustomerStatus({ devices, setDevices, customerId, onBack }) {
             if (a.id === arizaId) return { ...a, onayli: false, durum: "Reddedildi" };
             return a;
           }) || [];
-          const allDone = updatedArizalar.every(a => a.durum === "Tamamlandı" || a.durum === "Reddedildi");
-          const overallStatus = allDone ? "Hazır" : "Beklemede";
+          const overallStatus = deriveOverallStatusFromArizalar(updatedArizalar, "Beklemede");
 
           setDevices(devices.map((d) => d.id === device.id ? {
             ...d,

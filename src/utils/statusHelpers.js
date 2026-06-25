@@ -48,14 +48,40 @@ export const STATUS_LABELS = {
 
 export function getStatusGroup(durum) {
   if (!durum) return "pending";
-  if (durum === "İnceleniyor") return "inceleniyor";
-  if (durum === "Başlandı") return "baslandi";
-  if (durum === "Tamamlandı") return "delivered";
   if (DELIVERED_STATUSES.includes(durum)) return "delivered";
   if (APPROVED_STATUSES.includes(durum)) return "approved";
   if (PENDING_STATUSES.includes(durum)) return "pending";
   if (durum === "Reddedildi") return "pending";
+  if (durum === "İnceleniyor") return "pending";
+  if (durum === "Başlandı") return "approved";
+  if (durum === "Tamamlandı") return "approved";
   return "pending";
+}
+
+/** Arıza listesinden cihazın genel durumunu türetir. */
+export function deriveOverallStatusFromArizalar(arizalar = [], fallback = "Beklemede") {
+  if (!arizalar.length) return fallback;
+
+  const allRejected = arizalar.every((a) => a.durum === "Reddedildi");
+  if (allRejected) return "Reddedildi";
+
+  const allFinished = arizalar.every(
+    (a) => a.durum === "Tamamlandı" || a.durum === "Reddedildi"
+  );
+  const hasCompleted = arizalar.some((a) => a.durum === "Tamamlandı");
+  if (allFinished && hasCompleted) return "Hazır";
+
+  const hasActive = arizalar.some(
+    (a) => a.durum === "Başlandı" || a.durum === "Tamirde"
+  );
+  if (hasActive) return "Tamirde";
+
+  const hasPendingApproval = arizalar.some(
+    (a) => a.durum === "Onay Bekliyor" || (a.bildirimYapildi && a.onayli === null)
+  );
+  if (hasPendingApproval) return "Onay Bekliyor";
+
+  return fallback;
 }
 
 

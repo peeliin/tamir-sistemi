@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import {
+  MAX_DISCOUNT_PERCENT,
+  calcDiscountedPrice,
   createMessage,
   getLatestPendingCounterOffer,
   getLatestPendingDiscountRequest,
@@ -15,6 +17,8 @@ function NegotiationChat({ device, isAdmin, onUpdate }) {
 
   const messages = device.messages || [];
   const originalPrice = Number(device.fiyat) || 0;
+  const minOfferPrice =
+    originalPrice > 0 ? calcDiscountedPrice(originalPrice, MAX_DISCOUNT_PERCENT) : 1;
   const pendingRequest = getLatestPendingDiscountRequest(messages);
   const pendingCounter = !isAdmin ? getLatestPendingCounterOffer(messages) : null;
   const canNegotiate = device.durum === "Onay Bekliyor";
@@ -78,12 +82,22 @@ function NegotiationChat({ device, isAdmin, onUpdate }) {
       return;
     }
 
+    if (targetPrice < minOfferPrice) {
+      setError(
+        `En fazla %${MAX_DISCOUNT_PERCENT} indirim talep edebilirsiniz. Minimum teklif: ${minOfferPrice} ₺`
+      );
+      return;
+    }
+
     if (pendingRequest) {
       setError("Bekleyen bir indirim talebiniz var. Admin yanıtını bekleyin.");
       return;
     }
 
-    const pct = Math.round(((originalPrice - targetPrice) / originalPrice) * 100);
+    const pct = Math.min(
+      MAX_DISCOUNT_PERCENT,
+      Math.round(((originalPrice - targetPrice) / originalPrice) * 100)
+    );
 
     const msgText = text.trim() || `${targetPrice} ₺ net fiyat teklif ediyorum.`;
 
@@ -253,8 +267,8 @@ function NegotiationChat({ device, isAdmin, onUpdate }) {
         )}
         {messages.map((msg) => {
           const isMe = isAdmin ? msg.sender === "admin" : msg.sender === "customer";
-          const senderName = isMe
-            ? "Siz"
+          const senderName = isMe 
+            ? "Siz" 
             : (isAdmin ? "Müşteri" : "Tekniker");
 
           return (
@@ -291,15 +305,15 @@ function NegotiationChat({ device, isAdmin, onUpdate }) {
                 <input
                   id="offer-price-input"
                   type="number"
-                  min="1"
-                  max={originalPrice}
+                  min={minOfferPrice}
+                  max={originalPrice > 1 ? originalPrice - 1 : 1}
                   value={offerPriceInput}
                   onChange={(e) => setOfferPriceInput(Number(e.target.value))}
                   disabled={!!pendingRequest}
                   style={{ padding: "8px", borderRadius: "6px", border: "1px solid #d1d5db", width: "120px" }}
                 />
                 <span className="negotiation-chat__discount-preview" style={{ color: "#4b5563", fontSize: "14px" }}>
-                  Orijinal Fiyat: {originalPrice} ₺
+                  Orijinal: {originalPrice} ₺ · Maks. indirim: %{MAX_DISCOUNT_PERCENT} · Min. teklif: {minOfferPrice} ₺
                 </span>
               </div>
             </div>

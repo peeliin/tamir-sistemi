@@ -1,19 +1,20 @@
 /**
- * Benzersiz referans numarası üretir (Karmaşık / UUID benzeri).
- * Format: CHZ-XXXXXXXX
+ * Benzersiz referans numarası üretir.
+ * Format: CHZ-10001, CHZ-10002, ...
  */
 export function generateReferansNo(devices = []) {
   const prefix = "CHZ-";
+  const startSeq = 10001;
 
   const isTaken = (no) =>
     devices.some((d) => (d.referansNo || "").toUpperCase() === no.toUpperCase());
 
-  let referansNo = "";
-  do {
-    // Generate an 8-character random string (alphanumeric)
-    const randomPart = Math.random().toString(36).substring(2, 10).toUpperCase();
-    referansNo = `${prefix}${randomPart}`;
-  } while (isTaken(referansNo));
+  let seq = startSeq;
+  let referansNo = `${prefix}${seq}`;
+  while (isTaken(referansNo)) {
+    seq += 1;
+    referansNo = `${prefix}${seq}`;
+  }
 
   return referansNo;
 }

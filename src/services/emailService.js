@@ -14,7 +14,7 @@ export const sendWelcomeEmail = async (deviceData) => {
 
   // Müşteri paneli linkini mevcut domain üzerinden oluşturuyoruz
   const currentOrigin = window.location.origin;
-  const trackingLink = `${currentOrigin}/customer`;
+  const trackingLink = `${currentOrigin}/`;
 
   // Şablondaki dinamik alanlar
   const templateParams = {

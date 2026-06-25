@@ -6,6 +6,7 @@ import {
   normalizeReferansKey,
   parseCustomerId,
   findDeviceByCustomerInput,
+  deriveOverallStatusFromArizalar,
 } from "./statusHelpers";
 
 const sampleDevices = [
@@ -17,7 +18,9 @@ const sampleDevices = [
 describe("getStatusGroup", () => {
   it("durumları doğru gruplara ayırır", () => {
     expect(getStatusGroup("Beklemede")).toBe("pending");
+    expect(getStatusGroup("İnceleniyor")).toBe("pending");
     expect(getStatusGroup("Tamirde")).toBe("approved");
+    expect(getStatusGroup("Başlandı")).toBe("approved");
     expect(getStatusGroup("Teslim Edildi")).toBe("delivered");
     expect(getStatusGroup("Reddedildi")).toBe("pending");
   });
@@ -119,5 +122,31 @@ describe("findDeviceByCustomerInput", () => {
   it("olmayan kayıtta bulunamadı döner", () => {
     const result = findDeviceByCustomerInput(devices, "CHZ-99999");
     expect(result.found).toBe(false);
+  });
+});
+
+describe("deriveOverallStatusFromArizalar", () => {
+  it("tüm arızalar reddedildiyse Reddedildi döner", () => {
+    const arizalar = [
+      { id: 1, durum: "Reddedildi" },
+      { id: 2, durum: "Reddedildi" },
+    ];
+    expect(deriveOverallStatusFromArizalar(arizalar)).toBe("Reddedildi");
+  });
+
+  it("tamamlanan arıza varsa Hazır döner", () => {
+    const arizalar = [
+      { id: 1, durum: "Tamamlandı" },
+      { id: 2, durum: "Reddedildi" },
+    ];
+    expect(deriveOverallStatusFromArizalar(arizalar)).toBe("Hazır");
+  });
+
+  it("devam eden arıza varsa Tamirde döner", () => {
+    const arizalar = [
+      { id: 1, durum: "Başlandı" },
+      { id: 2, durum: "Beklemede" },
+    ];
+    expect(deriveOverallStatusFromArizalar(arizalar)).toBe("Tamirde");
   });
 });
