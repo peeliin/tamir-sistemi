@@ -88,7 +88,8 @@ export function loadDevices() {
       localStorage.setItem(DEVICES_KEY, JSON.stringify(migrated));
     }
     return migrated;
-  } catch {
+  } catch (e) {
+    console.error("loadDevices error:", e);
     return [];
   }
 }

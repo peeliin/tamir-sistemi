@@ -139,7 +139,9 @@
 }
 
 .chat-btn {
-  border: none;
+  background: var(--primary) !important;
+  color: #ffffff !important;
+  border: 1px solid var(--primary-dark) !important;
   border-radius: 8px;
   padding: 8px 14px;
   font-size: 13px;
@@ -154,42 +156,55 @@
 }
 
 .chat-btn--approve {
-  background: var(--success);
-  color: #fff;
+  background: var(--primary) !important;
+  color: #fff !important;
 }
 
 .chat-btn--approve:hover:not(:disabled) {
-  background: var(--success-hover);
+  background: var(--primary-hover) !important;
+  border-color: var(--primary-hover) !important;
 }
 
 .chat-btn--reject {
-  background: var(--danger);
-  color: #fff;
+  background: var(--primary) !important;
+  color: #fff !important;
 }
 
 .chat-btn--reject:hover:not(:disabled) {
-  background: var(--danger-hover);
+  background: var(--primary-hover) !important;
+  border-color: var(--primary-hover) !important;
 }
 
 .chat-btn--offer {
-  background: var(--info);
-  color: #fff;
+  background: var(--primary) !important;
+  color: #fff !important;
+}
+
+.chat-btn--offer:hover:not(:disabled) {
+  background: var(--primary-hover) !important;
+  border-color: var(--primary-hover) !important;
 }
 
 .chat-btn--send {
-  background: var(--primary);
-  color: #fff;
+  background: var(--primary) !important;
+  color: #fff !important;
 }
 
 .chat-btn--send:hover:not(:disabled) {
-  background: var(--primary-dark);
+  background: var(--primary-hover) !important;
+  border-color: var(--primary-hover) !important;
 }
 
 .chat-btn--discount {
   width: 100%;
   margin-top: 8px;
-  background: var(--warning);
-  color: #fff;
+  background: var(--primary) !important;
+  color: #fff !important;
+}
+
+.chat-btn--discount:hover:not(:disabled) {
+  background: var(--primary-hover) !important;
+  border-color: var(--primary-hover) !important;
 }
 
 .negotiation-chat__error {

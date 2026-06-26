@@ -39,7 +39,8 @@ function Login({ devices = [], setCustomerId, onAdminLogin, forceAdmin = false }
 
     // Müşteri doğrulaması
     const stored = loadDevices();
-    const deviceList = stored.length > 0 ? stored : devices;
+    const allDevices = [...(Array.isArray(stored) ? stored : []), ...(Array.isArray(devices) ? devices : [])];
+    const deviceList = Array.from(new Map(allDevices.map((d) => [d.id, d])).values());
     const result = findDeviceByCustomerInput(deviceList, identifier);
 
     if (!result.parsed?.valid) {
@@ -57,7 +58,7 @@ function Login({ devices = [], setCustomerId, onAdminLogin, forceAdmin = false }
     const device = deviceList.find((d) => String(d.id) === String(result.deviceId));
 
     if (device?.sifre) {
-      if (device.sifre !== pass) {
+      if (String(device.sifre) !== pass) {
         setError("Şifre hatalı.");
         return;
       }

@@ -100,14 +100,14 @@
   padding: 16px;
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  background: var(--bg-card);
+  background: var(--bg-main);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .customer-chat-widget__option:hover {
   border-color: var(--primary);
-  background: var(--bg-main);
+  background: var(--primary-light);
   box-shadow: var(--shadow-sm);
 }
 

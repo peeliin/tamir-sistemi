@@ -12,9 +12,8 @@ const EMAILJS_PUBLIC_KEY = "xd3WKHUCIAagAmWt4";
  */
 export const sendWelcomeEmail = async (deviceData) => {
 
-  // Müşteri paneli linkini mevcut domain üzerinden oluşturuyoruz
-  const currentOrigin = window.location.origin;
-  const trackingLink = `${currentOrigin}/`;
+  // Müşteri paneli linkini Vercel domaini üzerinden oluşturuyoruz
+  const trackingLink = "https://tamir-sistemi.vercel.app/";
 
   // Şablondaki dinamik alanlar
   const templateParams = {

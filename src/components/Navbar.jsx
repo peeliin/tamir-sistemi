@@ -9,7 +9,7 @@ function Navbar({ isAdmin, onHome, onLogout, devices, setDevices }) {
   return (
     <nav className="navbar">
       <button type="button" className="navbar__brand" onClick={onHome}>
-        Tamir Paneli
+        {isAdmin ? "Tamir Paneli" : "Tamir Sistemi"}
       </button>
 
       <div className="navbar__links">
@@ -21,9 +21,11 @@ function Navbar({ isAdmin, onHome, onLogout, devices, setDevices }) {
             Admin Panel
           </button>
         )}
-        <button type="button" className="navbar__home" onClick={onHome}>
-          Ana Menü
-        </button>
+        {!isAdmin && (
+          <button type="button" className="navbar__home" onClick={onHome}>
+            Ana Menü
+          </button>
+        )}
         {!isAdmin && (
           <button type="button" onClick={() => navigate("/")}>
             Giriş

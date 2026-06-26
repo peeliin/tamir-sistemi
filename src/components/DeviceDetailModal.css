@@ -75,6 +75,18 @@
   color: var(--text-main);
 }
 
+.whatsapp-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.whatsapp-link:hover {
+  transform: scale(1.2);
+}
+
+
 .checklist-section {
   display: flex;
   flex-direction: column;

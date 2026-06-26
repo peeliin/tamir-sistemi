@@ -83,9 +83,7 @@ function NegotiationChat({ device, isAdmin, onUpdate }) {
     }
 
     if (targetPrice < minOfferPrice) {
-      setError(
-        `En fazla %${MAX_DISCOUNT_PERCENT} indirim talep edebilirsiniz. Minimum teklif: ${minOfferPrice} ₺`
-      );
+      setError("Girdiğiniz teklif kabul edilebilir limitin altındadır.");
       return;
     }
 
@@ -312,8 +310,8 @@ function NegotiationChat({ device, isAdmin, onUpdate }) {
                   disabled={!!pendingRequest}
                   style={{ padding: "8px", borderRadius: "6px", border: "1px solid #d1d5db", width: "120px" }}
                 />
-                <span className="negotiation-chat__discount-preview" style={{ color: "#4b5563", fontSize: "14px" }}>
-                  Orijinal: {originalPrice} ₺ · Maks. indirim: %{MAX_DISCOUNT_PERCENT} · Min. teklif: {minOfferPrice} ₺
+                 <span className="negotiation-chat__discount-preview" style={{ color: "#4b5563", fontSize: "14px" }}>
+                  Orijinal: {originalPrice} ₺
                 </span>
               </div>
             </div>
